@@ -1,0 +1,16 @@
+.page {
+    background-color: #1a1a1a;
+    padding: 0;
+    margin: 0;
+    top: 0;
+    left:  0;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+}
+
+.uitext {
+    color: #FFFFFF;
+    font-family: arial;
+    text-align: center;
+}
