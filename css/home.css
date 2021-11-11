@@ -14,3 +14,26 @@
     font-family: arial;
     text-align: center;
 }
+
+.textEntry {
+    width: 80%;
+    font-size: 30px;
+    font-family: arial;
+    border: 2px solid white;
+    border-radius: 4px;
+    background-color: #1a1a1a;
+    color: #FFFFFF;
+    outline: none;
+}
+
+.typeField {
+    text-align: center;
+}
+
+.generatedText {
+    color: #FFFFFF;
+    font-family: arial;
+    text-align: center;
+    margin-left: 10%;
+    margin-right: 10%;
+}

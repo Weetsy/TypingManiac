@@ -8,6 +8,45 @@
 <body>
     <h1 class="uitext">Welcome to TypingManiac!</h1>
     <p class="uitext">Please make an account to begin</p>
+    <h2 class="generatedText" id="randomWords">Please type the following statement</h2>
+    <div class="content">
+    <div class="typeField">
+        <input type="text" placeholder="begin typing here..." name="newusername"
+        class="textEntry" autofocus id="typeBox" autocomplete="off"
+        autocorrect="off" autocapitalize="off" spellcheck="false">
+    </div>
+    <script type="text/javascript" src="1000-words.js"></script>
+    <script>
+    // Configures initial page
+    function configurePage() {
+        // Select random words to use from wordbank
+        let randomCount = 20; // Pick 20 words for now
+        let chosenWords = [];
+        for (let i = 0; i < randomCount; i++) {
+            chosenWords.push(wordbank[Math.floor(Math.random() * wordbank.length)]);
+        }
+        console.log("Chosen words are " + chosenWords.join(" "));
+        document.getElementById("randomWords").innerHTML = chosenWords.join(" ");
+        document.getElementById("typeBox").addEventListener("keyup", (event) => {
+            event.preventDefault();
+            if (event.keyCode == 32) {
+                let value = document.getElementById("typeBox").value;
+                //console.log("inputted word is " + value);
+                let words = getWords(value);
+                console.log("Words: " + words);
+            }
+        });
+    }
+    function getWords(value) {
+        // Words contains all inputted words
+        let words = value.split(' ');
+        lwords = words.filter(elem => {
+            elem !== " ";
+        });
+        return words;
+    }
+    configurePage();
+    </script>
 </body>
 </div>
 </html>
