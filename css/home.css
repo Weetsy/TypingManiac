@@ -16,7 +16,7 @@
 }
 
 .textEntry {
-    width: 80%;
+    width: 50%;
     font-size: 30px;
     font-family: arial;
     border: 2px solid white;
@@ -24,6 +24,7 @@
     background-color: #1a1a1a;
     color: #FFFFFF;
     outline: none;
+    text-align: left;
 }
 
 .typeField {
@@ -33,7 +34,7 @@
 .generatedText {
     color: #FFFFFF;
     font-family: arial;
-    text-align: center;
-    margin-left: 10%;
+    text-align: left;
+    margin-left: 25%;
     margin-right: 10%;
 }
