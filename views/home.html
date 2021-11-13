@@ -3,11 +3,11 @@
 <div class="page">
 <html>
 <head>
-    <title>Hello world</title>
+    <title>TypingManiac</title>
 </head>
 <body>
     <h1 class="uitext">Welcome to TypingManiac!</h1>
-    <p class="uitext">Please make an account to begin</p>
+    <p class="uitext">Not signed in</p>
     <h2 class="generatedText" id="randomWords">Please type the following statement</h2>
     <h2 class="timer" id="countdown">Time: </h2>
     <h1 class="uitext" id="score">Should not see this!!</h1>
@@ -20,7 +20,9 @@
     <script type="text/javascript" src="1000-words.js"></script>
     <script>
     let typedWords = 0; // Current words typed
-    let testTime = 10; // seconds for test
+    let correctChars = 0;
+    let missedChars = 0;
+    let testTime = 20; // seconds for test
     let startedTest = false; // Flag for checking if test was started already or not
     let timer = null; // Timer for user's time
     // Configures initial page
@@ -56,13 +58,15 @@
                 let value = document.getElementById("typeBox").value;
                 //console.log("inputted word is " + value);
                 let words = getWords(value);
-                console.log("Words: " + words);
                 checkSpace = analyzeWords(words, currentWords, chosenWords);
             }
             if (!checkSpace) {
-                console.log("Key was pressed!");
                 let word = document.getElementById("typeBox").value;
-                analyzeSubstrings(word, currentWords[0]);
+                let result = analyzeSubstrings(word, currentWords[0]);
+                if (event.keyCode != 8) { // Ignore backspace characters in accuracy 
+                    if (result) correctChars += 1;
+                    else missedChars += 1;
+                }
             }
         });
     }
@@ -98,32 +102,58 @@
             if (i < currentWord.length) {
                 if (word[i] !== currentWord[i]) {
                     document.getElementById("typeBox").style.color = "#FF0000";
-                    break;
+                    return false;
                 } else {
                     document.getElementById("typeBox").style.color = "#FFFFFF";
                 }
             } else {
                 if (word[currentWord.length] != ' ') {
                     document.getElementById("typeBox").style.color = "#FF0000";
-                    break;
+                    return false;
                 }
             }
         }
+        return true;
     }
     function countDown() {
         currentTime = parseInt(document.getElementById("countdown").innerHTML, 10);
         currentTime -= 1; // Decrement time
         if (currentTime <= 0) {
             let WPM = typedWords / (testTime / 60);
+            let totalChars = correctChars + missedChars
+            let accuracy = Math.floor((correctChars / totalChars) * 100);
+            console.log("Accuracy is " + accuracy.toString());
             clearInterval(timer);
             document.getElementById("score").style.display = "block";
             document.getElementById("score").innerHTML = "Congrats! You typed " +
                 WPM.toString() + " WPM!";
             document.getElementById("typeBox").style.display = "none";
+            insertStats("SampleUser", WPM, accuracy); // Insert data into DynamoDB
         }
         document.getElementById("countdown").innerHTML = currentTime.toString();
     }
-    configurePage();
+    // define the callAPI function that takes a first name and last name as parameters
+    function insertStats(user, speed, accuracy) {
+        // instantiate a headers object
+        let myHeaders = new Headers();
+        // add content type header to object
+        myHeaders.append("Content-Type", "application/json");
+        // using built in JSON utility package turn object to string and store in a variable
+        let raw = JSON.stringify( { "User": user, "WPM": speed, "Accuracy": accuracy });
+        // create a JSON object with parameters for API call and store in a variable
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+        // make API call with parameters and use promises to get response
+        fetch("https://4wiarmu0k6.execute-api.us-east-1.amazonaws.com/dev", requestOptions)
+        .then(response => response.text())
+        .then(result => console.log(JSON.parse(result).body))
+        .catch(error => console.log('error', error));
+    }
+    configurePage(); // Run setup function
     </script>
 </body>
 </div>
