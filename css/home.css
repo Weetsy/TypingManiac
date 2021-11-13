@@ -38,3 +38,11 @@
     margin-left: 25%;
     margin-right: 10%;
 }
+
+.timer {
+    color: #FFFFFF;
+    font-family: arial;
+    position: fixed;
+    left: 2%;
+    top: 0%;
+}

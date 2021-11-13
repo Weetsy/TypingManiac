@@ -9,6 +9,8 @@
     <h1 class="uitext">Welcome to TypingManiac!</h1>
     <p class="uitext">Please make an account to begin</p>
     <h2 class="generatedText" id="randomWords">Please type the following statement</h2>
+    <h2 class="timer" id="countdown">Time: </h2>
+    <h1 class="uitext" id="score">Should not see this!!</h1>
     <div class="content">
     <div class="typeField">
         <input type="text" placeholder="begin typing here..." name="newusername"
@@ -17,6 +19,10 @@
     </div>
     <script type="text/javascript" src="1000-words.js"></script>
     <script>
+    let typedWords = 0; // Current words typed
+    let testTime = 10; // seconds for test
+    let startedTest = false; // Flag for checking if test was started already or not
+    let timer = null; // Timer for user's time
     // Configures initial page
     function configurePage() {
         // Select random words to use from wordbank
@@ -24,6 +30,8 @@
         let shownCount = 8;
         let chosenWords = [];
         let currentWords = []; // Current words only contains next 20 words in bank
+        // Hide score element
+        document.getElementById("score").style.display = "none";
         for (let i = 0; i < randomCount; i++) {
             chosenWords.push(wordbank[Math.floor(Math.random() * wordbank.length)]);
         }
@@ -34,8 +42,15 @@
             currentWords.push(chosenWords.shift()); // Grab 20 words from chosenWords
         }
         document.getElementById("randomWords").innerHTML = currentWords.join(" ");
+        document.getElementById("countdown").innerHTML = testTime.toString();
         document.getElementById("typeBox").addEventListener("keyup", (event) => {
             event.preventDefault();
+            if (document.getElementById("typeBox").value != 0) {
+                if (!startedTest) {
+                    startedTest = true;
+                    timer = setInterval(countDown, 1000);
+                }
+            }
             let checkSpace = false;
             if (event.keyCode == 32) {
                 let value = document.getElementById("typeBox").value;
@@ -72,6 +87,7 @@
                 document.getElementById("typeBox").value = words.join(" ");
                 document.getElementById("randomWords").innerHTML = currentWords.join(" ");
                 document.getElementById("typeBox").placeholder = "";
+                typedWords += 1;
             }
         }
         if (phraseLength > words.length) return true;
@@ -86,8 +102,26 @@
                 } else {
                     document.getElementById("typeBox").style.color = "#FFFFFF";
                 }
+            } else {
+                if (word[currentWord.length] != ' ') {
+                    document.getElementById("typeBox").style.color = "#FF0000";
+                    break;
+                }
             }
         }
+    }
+    function countDown() {
+        currentTime = parseInt(document.getElementById("countdown").innerHTML, 10);
+        currentTime -= 1; // Decrement time
+        if (currentTime <= 0) {
+            let WPM = typedWords / (testTime / 60);
+            clearInterval(timer);
+            document.getElementById("score").style.display = "block";
+            document.getElementById("score").innerHTML = "Congrats! You typed " +
+                WPM.toString() + " WPM!";
+            document.getElementById("typeBox").style.display = "none";
+        }
+        document.getElementById("countdown").innerHTML = currentTime.toString();
     }
     configurePage();
     </script>
