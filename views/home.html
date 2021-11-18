@@ -63,19 +63,32 @@
             if (!checkSpace) {
                 let word = document.getElementById("typeBox").value;
                 let result = analyzeSubstrings(word, currentWords[0]);
-                if (event.keyCode != 8) { // Ignore backspace characters in accuracy 
+                if (event.keyCode != 8) { // Ignore backspace characters in accuracy
                     if (result) correctChars += 1;
                     else missedChars += 1;
                 }
             }
         });
     }
+    /*
+    (Array: String) getWords returns an array of Strings containing words. This
+    function splits on the space character in the current input field and
+    removes all empty strings from the String Array in the case that multiple
+    concurrent space characters are present, or there's a trailing space
+    character.
+    */
     function getWords(value) {
         return value.split(' ').filter((elem) => elem != '');
     }
-    // [NEEDS DOC]
-    // Returns true when all words are satisfied. False when a word does not match.
-    // Will clean out words array and write new words to currentWords when done.
+    /*
+    (Boolean) analyzeWords takes some (Array: String) words from the input field
+    on the webpage, (Array: String) currentWords from the on-screen wordbank
+    segment, and (Array: String) chosenWords from the total bank of chosen words
+    and removes correct words from the currentWords field. When a word from
+    currentWords is removed, another is added at the tail of the list from the
+    chosenWords bank. Returns true if all of the typed words are correct, and
+    false otherwise.
+    */
     function analyzeWords(words, currentWords, chosenWords) {
         let phraseLength = words.length;
         // In a perfect world we just compare the first word
@@ -97,6 +110,14 @@
         if (phraseLength > words.length) return true;
         return false;
     }
+    /*
+    (Boolean) analyzeSubstrings takes a (String) word from the input field and
+    compares it to the (String) currentWord that should be typed in by the user.
+    In the case that word is a substring of currentWord starting from the first
+    character in the word, the typeBox element is colored white. Otherwise the
+    typeBox element is colored red. Returns true when the substrings are
+    matching and false otherwise.
+    */
     function analyzeSubstrings(word, currentWord) {
         for (let i = 0; i < word.length; i++) {
             if (i < currentWord.length) {
@@ -115,6 +136,12 @@
         }
         return true;
     }
+    /*
+    (void) countDown is a function that runs from a generated interval object
+    that counts down every 1 second. When the (int) currentTime for the test
+    reaches zero, the test ends and the function displays the WPM and accuracy
+    of the typing test.
+    */
     function countDown() {
         currentTime = parseInt(document.getElementById("countdown").innerHTML, 10);
         currentTime -= 1; // Decrement time
@@ -132,7 +159,11 @@
         }
         document.getElementById("countdown").innerHTML = currentTime.toString();
     }
-    // define the callAPI function that takes a first name and last name as parameters
+    /*
+    (void) insertStats takes a (String) user, (Double) speed, (Int) accuracy and
+    sends them off to be inserted into DynamoDB as a [User: speed, accuracy]
+    record.
+    */
     function insertStats(user, speed, accuracy) {
         // instantiate a headers object
         let myHeaders = new Headers();
