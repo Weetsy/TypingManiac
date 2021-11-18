@@ -31,7 +31,7 @@ app.get('/google',
             scope:
                 ['email', 'profile']
         }
-    ));
+));
 
 app.get('/google/callback',
     passport.authenticate('google', {
@@ -44,7 +44,7 @@ app.get('/google/callback',
 );
 
 app.get('/redirect', function(req, res) {
-    res.send('fuck oauth2 but it works here ahah');
+    res.send('Redirecting...');
 })
 
 app.listen(port, () => console.log("server running on port" + port))
