@@ -22,7 +22,7 @@
     let typedWords = 0; // Current words typed
     let correctChars = 0;
     let missedChars = 0;
-    let testTime = 20; // seconds for test
+    let testTime = 60; // seconds for test
     let startedTest = false; // Flag for checking if test was started already or not
     let timer = null; // Timer for user's time
     // Configures initial page
@@ -170,7 +170,7 @@
         // add content type header to object
         myHeaders.append("Content-Type", "application/json");
         // using built in JSON utility package turn object to string and store in a variable
-        let raw = JSON.stringify( { "User": user, "WPM": speed, "Accuracy": accuracy });
+        let raw = JSON.stringify({ "User": user, "WPM": speed, "Accuracy": accuracy });
         // create a JSON object with parameters for API call and store in a variable
         var requestOptions = {
             method: 'POST',
@@ -183,6 +183,24 @@
         .then(response => response.text())
         .then(result => console.log(JSON.parse(result).body))
         .catch(error => console.log('error', error));
+    }
+    /*
+    (JSON) getUserData performs a GET request to get data from the DynamoDB data
+    base for the given (String) user. Returns a JSON object containing records
+    for the user.
+    */
+    async function getUserData(user) {
+        var requestOptions = {
+            method: 'GET',
+            redirect: 'follow',
+            mode: 'cors'
+        };
+        return new Promise((resolve, reject) => {
+            fetch("https://4wiarmu0k6.execute-api.us-east-1.amazonaws.com/dev/?user=" + user, requestOptions)
+            .then(response => response.text())
+            .then(result => resolve(JSON.parse(result)))
+            .catch(error => console.log('error', error));
+        });
     }
     configurePage(); // Run setup function
     </script>
