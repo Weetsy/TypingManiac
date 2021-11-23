@@ -34,14 +34,16 @@
         let plays = userData.Items;
         let i = 0
         let wpm = []
+        let accuracy = []
         
         while(i < plays.length) {
             console.log(JSON.stringify(plays[i]))
             wpm.push(plays[i].WPM);
+            accuracy.push(plays[i].Accuracy)
             i++;
         }
 
-        const chartOptions = {
+        let chartOptions = {
             type: 'line',
             data: {
                 datasets: [
@@ -59,24 +61,24 @@
                 display: true,
                 },
                 scales: {
-                xAxes: [
-                    {
-                    display: true,
-                    scaleLabel: {
+                    xAxes: [
+                        {
                         display: true,
-                        labelString: 'Time',
-                    },
-                    },
-                ],
-                yAxes: [
-                    {
-                    display: true,
-                    scaleLabel: {
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Time',
+                        },
+                        },
+                    ],
+                    yAxes: [
+                        {
                         display: true,
-                        labelString: 'Words Per Minute',
-                    },
-                    }
-                ]
+                        scaleLabel: {
+                            display: true,
+                            labelString: 'Words Per Minute',
+                        },
+                        }
+                    ]
                 },
             }
         }
@@ -87,6 +89,8 @@
             mode: 'cors'
         };
 
+        //POTENTIAL TODO: have each fetch be called separately and store the images so they can all be displayed at once. as of now there is lag time.
+
         fetch('https://quickchart.io/chart?c=' + JSON.stringify(chartOptions), requestOptions)
         .then()
         .then(result => {
@@ -94,13 +98,16 @@
             img.src = result.url;
             img.width = 500;
             document.getElementById('chartHeader').append(img);
-            
-            img = document.createElement('img');
-            img.src = result.url;
-            img.width = 500;
-            document.getElementById('chartHeader').append(img);
+        })
+        .catch(error => console.log('error', error));
 
-            img = document.createElement('img');
+        chartOptions.options.scales.yAxes[0].scaleLabel.labelString = 'Accuracy';
+        chartOptions.data.datasets[0].label = 'Your Accuracy';
+
+        fetch('https://quickchart.io/chart?c=' + JSON.stringify(chartOptions), requestOptions)
+        .then()
+        .then(result => {
+            let img = document.createElement('img');
             img.src = result.url;
             img.width = 500;
             document.getElementById('chartHeader').append(img);
