@@ -1,27 +1,64 @@
 <!DOCTYPE html>
 <link rel="stylesheet" type="text/css" href="home.css">
-<script>
-    async function getGraphs() {
-        var requestOptions = {
-            method: 'GET',
-            redirect: 'follow',
-        };
-        return new Promise((resolve, reject) => {
-            fetch("http://localhost:3000/getStats", requestOptions)
-            .then(response => response.text())
-            .then(result => resolve(JSON.parse(result)))
-            .catch(error => console.log('error', error));
-        });
-    }
-    getGraphs();
-</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <div class="page">
     <html onload="getGraphs()">
         <head>
             <title>Stats</title>
         </head>
+        <canvas id="myChart" width="500" height="500"></canvas>
         <body>
             <h1 class="uitext">Your Stats</h1>
         </body>
     </html>
 </div>
+<script>
+    async function getUserData(user) {
+        var requestOptions = {
+            method: 'GET',
+            redirect: 'follow',
+            mode: 'cors'
+        };
+        return new Promise((resolve, reject) => {
+            fetch("https://4wiarmu0k6.execute-api.us-east-1.amazonaws.com/dev/?user=" + user, requestOptions)
+            .then(response => response.text())
+            .then(result => resolve(JSON.parse(result)))
+            .catch(error => console.log('error', error));
+        });
+    }
+    
+    async function getGraphs() {
+        /*
+        var requestOptions = {
+            method: 'GET',
+            redirect: 'follow',
+        };
+        const TEMPUSER = "Sans";
+        return new Promise((resolve, reject) => {
+            fetch("http://localhost:3000/getStats?user=" + TEMPUSER, requestOptions)
+            .then(response => response.text())
+            .then(result => resolve(JSON.parse(result)))
+            .catch(error => console.log('error', error));
+        });
+        */
+
+        const ctx = document.getElementById('myChart').getContext('2d');
+        const labels = ['a', 'a', 'a', 'a', 'a', 'a', 'a'];
+        const data = {
+        labels: labels,
+        datasets: [{
+            label: 'My First Dataset',
+            data: [65, 59, 80, 81, 56, 55, 40],
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
+        }]
+        };
+        const config = {
+            type: 'line',
+            data: data,
+        };
+        const myChart = new Chart(ctx, config);
+    }
+    getGraphs();
+</script>
