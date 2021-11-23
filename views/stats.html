@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 <link rel="stylesheet" type="text/css" href="home.css">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.6.0/chart.min.js" integrity="sha512-GMGzUEevhWh8Tc/njS0bDpwgxdCJLQBWG3Z2Ct+JGOpVnEmjvNx6ts4v6A2XJf1HOrtOsfhv3hBKpK9kE5z8AQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <div class="page">
-    <html onload="getGraphs()">
+    <html>
         <head>
             <title>Stats</title>
         </head>
-        <canvas id="myChart" width="500" height="500"></canvas>
         <body>
             <h1 class="uitext">Your Stats</h1>
+            <h2 id="chartHeader"></h2>
         </body>
     </html>
 </div>
@@ -26,39 +25,88 @@
             .catch(error => console.log('error', error));
         });
     }
-    
-    async function getGraphs() {
-        /*
-        var requestOptions = {
+
+    async function getChart() {
+
+        const TESTUSER = "Sans";
+        let userData = await getUserData(TESTUSER);
+
+        let plays = userData.Items;
+        let i = 0
+        let wpm = []
+        
+        while(i < plays.length) {
+            console.log(JSON.stringify(plays[i]))
+            wpm.push(plays[i].WPM);
+            i++;
+        }
+
+        const chartOptions = {
+            type: 'line',
+            data: {
+                datasets: [
+                {
+                    label: 'Your WPM',
+                    backgroundColor: 'rgb(255, 99, 132)',
+                    borderColor: 'rgb(255, 99, 132)',
+                    data: wpm,
+                    fill: false,
+                },
+                ],
+            },
+            options: {
+                title: {
+                display: true,
+                },
+                scales: {
+                xAxes: [
+                    {
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Time',
+                    },
+                    },
+                ],
+                yAxes: [
+                    {
+                    display: true,
+                    scaleLabel: {
+                        display: true,
+                        labelString: 'Words Per Minute',
+                    },
+                    }
+                ]
+                },
+            }
+        }
+
+        let requestOptions = {
             method: 'GET',
             redirect: 'follow',
+            mode: 'cors'
         };
-        const TEMPUSER = "Sans";
-        return new Promise((resolve, reject) => {
-            fetch("http://localhost:3000/getStats?user=" + TEMPUSER, requestOptions)
-            .then(response => response.text())
-            .then(result => resolve(JSON.parse(result)))
-            .catch(error => console.log('error', error));
-        });
-        */
 
-        const ctx = document.getElementById('myChart').getContext('2d');
-        const labels = ['a', 'a', 'a', 'a', 'a', 'a', 'a'];
-        const data = {
-        labels: labels,
-        datasets: [{
-            label: 'My First Dataset',
-            data: [65, 59, 80, 81, 56, 55, 40],
-            fill: false,
-            borderColor: 'rgb(75, 192, 192)',
-            tension: 0.1
-        }]
-        };
-        const config = {
-            type: 'line',
-            data: data,
-        };
-        const myChart = new Chart(ctx, config);
+        fetch('https://quickchart.io/chart?c=' + JSON.stringify(chartOptions), requestOptions)
+        .then()
+        .then(result => {
+            let img = document.createElement('img');
+            img.src = result.url;
+            img.width = 500;
+            document.getElementById('chartHeader').append(img);
+            
+            img = document.createElement('img');
+            img.src = result.url;
+            img.width = 500;
+            document.getElementById('chartHeader').append(img);
+
+            img = document.createElement('img');
+            img.src = result.url;
+            img.width = 500;
+            document.getElementById('chartHeader').append(img);
+        })
+        .catch(error => console.log('error', error));
     }
-    getGraphs();
+
+    getChart();
 </script>
