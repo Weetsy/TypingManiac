@@ -1,3 +1,5 @@
+// NOTE: TypingTest.js should be used in conjunction with Scripts.js, and
+// Scripts.js should be loaded FIRST. 
 let timer = null; // Global timer variable
 
 /*
@@ -170,7 +172,16 @@ function countDown() {
         document.getElementById("score").innerHTML = "Congrats! You typed " +
             WPM.toString() + " WPM!";
         document.getElementById("typeBox").style.display = "none";
-        insertStats("SampleUser", WPM, accuracy); // Insert data into DynamoDB
+        // Insert stats for the logged in user
+        const login = gitHubLogin();
+        // If we aren't logged in, do not submit speed
+        if (login != null) {
+            login.then((data) => {
+                if (data != null) { // If our token is still valid
+                    insertStats(data, WPM, accuracy); // Insert data into DynamoDB
+                }
+            })
+        }
     }
     document.getElementById("countdown").innerHTML = currentTime.toString();
 }
