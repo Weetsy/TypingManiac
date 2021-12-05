@@ -30,6 +30,12 @@
         constructor(user) {
             this.user = user;
             this.dataset = this.getUserData(user);
+            this.wpmDaily = null;
+            this.wpmWeekly = null;
+            this.wpmAll = null;
+            this.accDaily = null;
+            this.accWeekly = null;
+            this.accAll = null;
             this.populateObject();
         }
 
@@ -37,6 +43,7 @@
             let chartOptions = {
                 type: 'line',
                 data: {
+                    labels: [0,1,2,3],
                     datasets: [
                     {
                         label: overallLabel,
@@ -91,20 +98,37 @@
             .catch(error => console.log('error', error));
         }
 
+        // helper funciton for calling sort on the array in sortByVersion
+        versionCompare(a, b) {
+            if(Number(a['Version']) > Number(b['Version'])) {
+                return 1;
+            }
+            if(Number(a['Version']) < Number(b['Version'])) {
+                return -1;
+            }
+            return 0;
+        }
+
+        sortByVersion(submissions) {
+            submissions.sort(this.versionCompare);
+        }
+
         async populateObject() {
             this.dataset = await this.dataset; // ensure the promise has resolved from the constructor
             this.dataset = this.dataset.Items;
+            this.sortByVersion(this.dataset);
             console.log(this.dataset);
             let wpm = [];
             let accuracy = [];
             let i = 0;
 
             while(i < this.dataset.length) {
-                //console.log(JSON.stringify(plays[i]))
                 wpm.push(this.dataset[i].WPM);
-                accuracy.push(this.dataset[i].Accuracy)
+                accuracy.push(this.dataset[i].Accuracy);
                 i++;
             }
+            console.log(`wpm = ${wpm}`);
+            console.log(`acc = ${accuracy}`);
 
             this.createGraph(null, wpm, "WPM", "Your WPM");
             this.createGraph(null, accuracy, "Accuracy", "Your Accuracy");
