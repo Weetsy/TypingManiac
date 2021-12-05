@@ -1,17 +1,35 @@
 <!DOCTYPE html>
 <link rel="stylesheet" type="text/css" href="home.css">
-<div class="page">
-    <html>
-        <head>
-            <title>Stats</title>
-        </head>
-        <body>
+<html>
+    <head>
+        <title>Stats</title>
+    </head>
+    <body class="page">
+        <div class="graphpage">
             <h1 class="uitext">Your Stats</h1>
-            <h2 id="wpmChart"></h2>
-            <h3 id="accChart"></h3>
-        </body>
-    </html>
-</div>
+            <div class="chartboxcollection">
+                <div class="chartbox">
+                    <h2 id="wpmChart"></h2>
+                    <div class="chartbuttoncollection">
+                        <button type="button" class="chartbutton">All Time</button>
+                        <button type="button" class="chartbutton">Daily</button>
+                        <button type="button" class="chartbutton">Weekly</button>
+                    </div>
+                </div>
+            </div>
+            <div class="chartboxcollection">
+                <div class="chartbox">
+                    <h3 id="accChart"></h3>
+                    <div class="chartbuttoncollection">
+                        <button type="button" class="chartbutton">All Time</button>
+                        <button type="button" class="chartbutton">Daily</button>
+                        <button type="button" class="chartbutton">Weekly</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>
 <script>
     class Stats {
         getUserData(user) {
@@ -81,7 +99,7 @@
                     },
                 }
             }
-            
+
             let requestOptions = {
                 method: 'GET',
                 redirect: 'follow',
@@ -102,7 +120,7 @@
                 })
                 .catch(error => console.log('error', error));
             })
-            
+
         }
 
         setChart(chart, type) {
