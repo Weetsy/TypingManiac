@@ -1,3 +1,10 @@
+/*
+(Promise) gitHubLogin returns a Promise that contains the username of the user
+currently signed into the website. This function performs a GET request with
+GitHub's API for accessing user information. To access the user's information,
+first check if the return value is null, and if not then access the data through
+the returned Promise's .then((data) => {}) method. 
+*/
 function gitHubLogin() {
     if (!document.cookie.includes('github-token')) {
         return null;

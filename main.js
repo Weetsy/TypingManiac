@@ -4,10 +4,15 @@ const fs = require('fs');
 const https = require('https');
 const { ClientCredentials, ResourceOwnerPassword, AuthorizationCode } = require('simple-oauth2');
 
+/*
+OAuth2 configuration data to use GitHub for logging into our application. The
+client secret is stored in the OAUTHSECRET environment variable, so that will
+need to be configured before the application can be used.
+*/
 const client = new AuthorizationCode({
     client: {
         id: '881d76238cc4707084a6',
-        secret: '3ea5b4c93afd6d1be0c6de15735c70bf4fd21a77'
+        secret: process.env.OAUTHSECRET
     },
     auth: {
         tokenHost: 'https://github.com',
@@ -25,20 +30,14 @@ const authorizationUri = client.authorizeURL({
 
 // Initial page redirecting to Github
 app.get('/auth', (req, res) => {
-    console.log(authorizationUri);
     res.redirect(authorizationUri);
 });
 
-app.get('/login', function(req, res) {
-    res.send('Hello<br><a href="/auth">Log in with Github</a>');
-    //res.sendFile(`${__dirname}/views/home.html`);
-});
-
 app.get('/', function(req, res) {
-    //res.send('Hello<br><a href="/auth">Log in with Github</a>');
     res.sendFile(`${__dirname}/views/home.html`);
 });
 
+// Send JS and CSS files to the client
 app.get('/home.css', function(req, res) {
     res.sendFile(`${__dirname}/css/home.css`);
 });
@@ -55,6 +54,12 @@ app.get('/Scripts.js', function(req, res) {
     res.sendFile(`${__dirname}/scripts/Scripts.js`);
 });
 
+/*
+The GitHub login page is going to redirect us to the /callback route so that
+NodeJS can send our authentication token to the front end. The authentication
+token is saved to the client's web browser as a cookie to access their GitHub
+profile information. After logging in the client is sent back to '/'.
+*/
 app.get('/callback', async (req, res) => {
     const { code } = req.query;
     const options = {
@@ -62,7 +67,6 @@ app.get('/callback', async (req, res) => {
     };
     try {
       const accessToken = await client.getToken(options);
-      console.log(accessToken.token.access_token);
       res.cookie('github-token', accessToken.token.access_token);
       res.redirect('/');
     } catch (error) {
