@@ -4,6 +4,8 @@ const fs = require('fs');
 const https = require('https');
 const { ClientCredentials, ResourceOwnerPassword, AuthorizationCode } = require('simple-oauth2');
 
+// Set custom application icon
+app.use('/favicon.ico', express.static(`${__dirname}/icons/favicon.ico`));
 /*
 OAuth2 configuration data to use GitHub for logging into our application. The
 client secret is stored in the OAUTHSECRET environment variable, so that will
@@ -25,7 +27,7 @@ const client = new AuthorizationCode({
 const authorizationUri = client.authorizeURL({
     redirect_uri: 'http://localhost:3000/callback',
     scope: 'user',
-    state: '3(#0/!~',
+    state: 'j!=.X6n%yyyeXz', // Random human-generated code :)
 });
 
 // Initial page redirecting to Github
