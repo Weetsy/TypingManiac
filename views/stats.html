@@ -44,7 +44,7 @@
             let chartOptions = {
                 type: 'line',
                 data: {
-                    labels: [0,1,2,3],
+                    labels: xData,
                     datasets: [
                     {
                         label: overallLabel,
@@ -148,11 +148,13 @@
             console.log(this.dataset);
             let wpm = [];
             let accuracy = [];
+            let dates = [];
             let i = 0;
 
             while(i < this.dataset.length) {
                 wpm.push(this.dataset[i].WPM);
                 accuracy.push(this.dataset[i].Accuracy);
+                dates.push(this.dataset[i].Time)
                 i++;
             }
             console.log(`wpm = ${wpm}`);
@@ -160,10 +162,10 @@
 
             this.wpmDaily = null;
             this.wpmWeekly = null;
-            this.wpmAll = await this.createGraph(null, wpm, "WPM", "Your WPM");
+            this.wpmAll = await this.createGraph(dates, wpm, "WPM", "Your WPM");
             this.accDaily = null;
             this.accWeekly = null;
-            this.accAll = await this.createGraph(null, accuracy, "Accuracy", "Your Accuracy");
+            this.accAll = await this.createGraph(dates, accuracy, "Accuracy", "Your Accuracy");
 
             this.setChart(this.wpmAll, "wpm");
             this.setChart(this.accAll, "acc");
