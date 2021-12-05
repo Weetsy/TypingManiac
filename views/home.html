@@ -7,7 +7,7 @@
 </head>
 <body>
     <h1 class="uitext">Welcome to TypingManiac!</h1>
-    <p class="uitext">Not signed in</p>
+    <p class="uitext" id="userbox">...</p>
     <h2 class="generatedText" id="randomWords">Please type the following statement</h2>
     <h2 class="timer" id="countdown">Time: </h2>
     <h1 class="uitext" id="score">Should not see this!!</h1>
@@ -17,11 +17,33 @@
         class="textEntry" autofocus id="typeBox" autocomplete="off"
         autocorrect="off" autocapitalize="off" spellcheck="false">
     </div>
+    <div class="buttonfield">
+        <form id="logcharts" action="/auth" method="get">
+            <button type="submit" class="uibutton"
+            style="vertical-align:middle"><span id="buttonlabel">Log in </span>
+            </button>
+        </form>
+    </div>
     <script type="text/javascript" src="1000-words.js"></script>
     <script type="text/javascript" src="TypingTest.js"></script>
+    <script type="text/javascript" src="Scripts.js"></script>
     <script>
     let ct = new TypingTest(20); // Make a new test with time 20
     configurePage(ct); // Run setup function
+    let mylogin = gitHubLogin();
+    if (mylogin != null) {
+        mylogin.then((data) => {
+            if (data != null) {
+                document.getElementById('userbox').innerHTML = 'Hello ' + data;
+                document.getElementById('buttonlabel').innerHTML = 'Stats ';
+                document.getElementById('logcharts').action = '/stats'
+            } else {
+                document.getElementById('userbox').innerHTML = 'Not logged in';
+            }
+        });
+    } else {
+        document.getElementById('userbox').innerHTML = 'Not logged in';
+    }
     </script>
 </body>
 </div>

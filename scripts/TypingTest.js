@@ -14,7 +14,6 @@ class TypingTest {
         this.chosenWords = [];
         this.currentWords = [];
     }
-
     /*
     (Array: String) getWords returns an array of Strings containing words. This
     function splits on the space character in the current input field and
@@ -81,25 +80,6 @@ class TypingTest {
         }
         return true;
     }
-}
-// Functions outside of TypingTest class but relevant to it
-/*
-(JSON) getUserData performs a GET request to get data from the DynamoDB data
-base for the given (String) user. Returns a JSON object containing records
-for the user.
-*/
-async function getUserData(user) {
-    var requestOptions = {
-        method: 'GET',
-        redirect: 'follow',
-        mode: 'cors'
-    };
-    return new Promise((resolve, reject) => {
-        fetch("https://4wiarmu0k6.execute-api.us-east-1.amazonaws.com/dev/?user=" + user, requestOptions)
-        .then(response => response.text())
-        .then(result => resolve(JSON.parse(result)))
-        .catch(error => console.log('error', error));
-    });
 }
 
 /*
