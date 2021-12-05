@@ -7,7 +7,8 @@
         </head>
         <body>
             <h1 class="uitext">Your Stats</h1>
-            <h2 id="chartHeader"></h2>
+            <h2 id="wpmChart"></h2>
+            <h3 id="accChart"></h3>
         </body>
     </html>
 </div>
@@ -87,15 +88,42 @@
                 mode: 'cors'
             };
 
-            fetch('https://quickchart.io/chart?c=' + JSON.stringify(chartOptions), requestOptions)
-            .then()
-            .then(result => {
-                let img = document.createElement('img');
-                img.src = result.url;
-                img.width = 500;
-                document.getElementById('chartHeader').append(img);
+            return new Promise((resolve, reject) => {
+                fetch('https://quickchart.io/chart?c=' + JSON.stringify(chartOptions), requestOptions)
+                .then()
+                .then(result => {
+                    /*
+                    let img = document.createElement('img');
+                    img.src = result.url;
+                    img.width = 500;
+                    document.getElementById('chartHeader').append(img);
+                    */
+                    resolve(result.url);
+                })
+                .catch(error => console.log('error', error));
             })
-            .catch(error => console.log('error', error));
+            
+        }
+
+        setChart(chart, type) {
+            let header = "";
+            if(type == "wpm") {
+                header = "wpmChart";
+                if(document.getElementById(header + "X") != null) {
+                    document.getElementById(header + "X").remove();
+                }
+            }
+            if(type == "acc") {
+                header = "accChart";
+                if(document.getElementById(header + "X") != null) {
+                    document.getElementById(header + "X").remove();
+                }
+            }
+            let img = document.createElement('img');
+            img.src = chart;
+            img.id = header + "X";
+            img.width = 500;
+            document.getElementById(header).append(img);
         }
 
         // helper funciton for calling sort on the array in sortByVersion
@@ -130,8 +158,15 @@
             console.log(`wpm = ${wpm}`);
             console.log(`acc = ${accuracy}`);
 
-            this.createGraph(null, wpm, "WPM", "Your WPM");
-            this.createGraph(null, accuracy, "Accuracy", "Your Accuracy");
+            this.wpmDaily = null;
+            this.wpmWeekly = null;
+            this.wpmAll = await this.createGraph(null, wpm, "WPM", "Your WPM");
+            this.accDaily = null;
+            this.accWeekly = null;
+            this.accAll = await this.createGraph(null, accuracy, "Accuracy", "Your Accuracy");
+
+            this.setChart(this.wpmAll, "wpm");
+            this.setChart(this.accAll, "acc");
         }
     }
 
