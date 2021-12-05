@@ -12,108 +12,104 @@
     </html>
 </div>
 <script>
-    async function getUserData(user) {
-        var requestOptions = {
-            method: 'GET',
-            redirect: 'follow',
-            mode: 'cors'
-        };
-        return new Promise((resolve, reject) => {
-            fetch("https://4wiarmu0k6.execute-api.us-east-1.amazonaws.com/dev/?user=" + user, requestOptions)
-            .then(response => response.text())
-            .then(result => resolve(JSON.parse(result)))
-            .catch(error => console.log('error', error));
-        });
-    }
-
-    async function getChart() {
-
-        const TESTUSER = "Sans";
-        let userData = await getUserData(TESTUSER);
-
-        let plays = userData.Items;
-        let i = 0
-        let wpm = []
-        let accuracy = []
-        
-        while(i < plays.length) {
-            console.log(JSON.stringify(plays[i]))
-            wpm.push(plays[i].WPM);
-            accuracy.push(plays[i].Accuracy)
-            i++;
+    class Stats {
+        getUserData(user) {
+            var requestOptions = {
+                method: 'GET',
+                redirect: 'follow',
+                mode: 'cors'
+            };
+            return new Promise((resolve, reject) => {
+                fetch("https://4wiarmu0k6.execute-api.us-east-1.amazonaws.com/dev/?user=" + user, requestOptions)
+                .then(response => response.text())
+                .then(result => resolve(JSON.parse(result)))
+                .catch(error => console.log('error', error));
+            });
         }
 
-        let chartOptions = {
-            type: 'line',
-            data: {
-                datasets: [
-                {
-                    label: 'Your WPM',
-                    backgroundColor: 'rgb(255, 99, 132)',
-                    borderColor: 'rgb(255, 99, 132)',
-                    data: wpm,
-                    fill: false,
-                },
-                ],
-            },
-            options: {
-                title: {
-                display: true,
-                },
-                scales: {
-                    xAxes: [
-                        {
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Time',
-                        },
-                        },
+        constructor(user) {
+            this.user = user;
+            this.dataset = this.getUserData(user);
+            this.populateObject();
+        }
+
+        createGraph(xData, yData, yLabel, overallLabel) {
+            let chartOptions = {
+                type: 'line',
+                data: {
+                    datasets: [
+                    {
+                        label: overallLabel,
+                        backgroundColor: 'rgb(255, 99, 132)',
+                        borderColor: 'rgb(255, 99, 132)',
+                        data: yData,
+                        fill: false,
+                    },
                     ],
-                    yAxes: [
-                        {
-                        display: true,
-                        scaleLabel: {
-                            display: true,
-                            labelString: 'Words Per Minute',
-                        },
-                        }
-                    ]
                 },
+                options: {
+                    title: {
+                    display: true,
+                    },
+                    scales: {
+                        xAxes: [
+                            {
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Time',
+                            },
+                            },
+                        ],
+                        yAxes: [
+                            {
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: yLabel,
+                            },
+                            }
+                        ]
+                    },
+                }
             }
+            
+            let requestOptions = {
+                method: 'GET',
+                redirect: 'follow',
+                mode: 'cors'
+            };
+
+            fetch('https://quickchart.io/chart?c=' + JSON.stringify(chartOptions), requestOptions)
+            .then()
+            .then(result => {
+                let img = document.createElement('img');
+                img.src = result.url;
+                img.width = 500;
+                document.getElementById('chartHeader').append(img);
+            })
+            .catch(error => console.log('error', error));
         }
 
-        let requestOptions = {
-            method: 'GET',
-            redirect: 'follow',
-            mode: 'cors'
-        };
+        async populateObject() {
+            this.dataset = await this.dataset; // ensure the promise has resolved from the constructor
+            this.dataset = this.dataset.Items;
+            console.log(this.dataset);
+            let wpm = [];
+            let accuracy = [];
+            let i = 0;
 
-        //POTENTIAL TODO: have each fetch be called separately and store the images so they can all be displayed at once. as of now there is lag time.
+            while(i < this.dataset.length) {
+                //console.log(JSON.stringify(plays[i]))
+                wpm.push(this.dataset[i].WPM);
+                accuracy.push(this.dataset[i].Accuracy)
+                i++;
+            }
 
-        fetch('https://quickchart.io/chart?c=' + JSON.stringify(chartOptions), requestOptions)
-        .then()
-        .then(result => {
-            let img = document.createElement('img');
-            img.src = result.url;
-            img.width = 500;
-            document.getElementById('chartHeader').append(img);
-        })
-        .catch(error => console.log('error', error));
-
-        chartOptions.options.scales.yAxes[0].scaleLabel.labelString = 'Accuracy';
-        chartOptions.data.datasets[0].label = 'Your Accuracy';
-
-        fetch('https://quickchart.io/chart?c=' + JSON.stringify(chartOptions), requestOptions)
-        .then()
-        .then(result => {
-            let img = document.createElement('img');
-            img.src = result.url;
-            img.width = 500;
-            document.getElementById('chartHeader').append(img);
-        })
-        .catch(error => console.log('error', error));
+            this.createGraph(null, wpm, "WPM", "Your WPM");
+            this.createGraph(null, accuracy, "Accuracy", "Your Accuracy");
+        }
     }
 
-    getChart();
+    let userStats = new Stats("SampleUser");
 </script>
