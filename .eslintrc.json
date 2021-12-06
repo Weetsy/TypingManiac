@@ -9,6 +9,22 @@
         "ecmaVersion": 13
     },
     "rules": {
-        "indent": ["error", 2]
-    }
+        "indent": ["error", 2],
+		"max-len": ["error", 120],
+        "quotes": ["error", "single"],
+        "spaced-comment": ["error", "always"],
+        "arrow-spacing": ["error", { "before": true, "after": true }],
+        "brace-style": ["error", "1tbs"],
+        "no-mixed-spaces-and-tabs": ["error", true],
+        "space-before-blocks": ["error", { "functions": "always", "keywords": "always", "classes": "always" }],
+        "space-infix-ops": "error",
+        "space-unary-ops": "error",
+        "semi": ["error", "always"],
+        "keyword-spacing": ["error", { "before": true, "after": true }],
+        "block-spacing": "error",
+        "func-call-spacing": "error"
+    },
+    "plugins": [
+        "html"
+    ]
 }

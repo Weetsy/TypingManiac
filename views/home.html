@@ -32,22 +32,22 @@
     let mylogin = gitHubLogin();
     // Check login status using the returned Promise's .then() method.
     if (mylogin != null) {
-        mylogin.then((data) => {
-            if (data != null) {
-                document.getElementById('userbox').innerHTML = 'Welcome ' + data;
-                document.getElementById('buttonlabel').innerHTML = 'Stats ';
-                document.getElementById('logcharts').action = '/stats'
-                document.getElementById('controlbutton').disabled = false;
-            } else {
-                document.getElementById('userbox').innerHTML = 'Not logged in';
-                document.getElementById('buttonlabel').innerHTML = "Login";
-                document.getElementById('controlbutton').disabled = false;
-            }
-        });
+      mylogin.then((data) => {
+        if (data != null) {
+          document.getElementById('userbox').innerHTML = 'Welcome ' + data;
+          document.getElementById('buttonlabel').innerHTML = 'Stats ';
+          document.getElementById('logcharts').action = '/stats';
+          document.getElementById('controlbutton').disabled = false;
+        } else {
+          document.getElementById('userbox').innerHTML = 'Not logged in';
+          document.getElementById('buttonlabel').innerHTML = 'Login';
+          document.getElementById('controlbutton').disabled = false;
+        }
+      });
     } else {
-        document.getElementById('userbox').innerHTML = 'Not logged in';
-        document.getElementById('buttonlabel').innerHTML = "Login";
-        document.getElementById('controlbutton').disabled = false;
+      document.getElementById('userbox').innerHTML = 'Not logged in';
+      document.getElementById('buttonlabel').innerHTML = 'Login';
+      document.getElementById('controlbutton').disabled = false;
     }
     </script>
 </body>

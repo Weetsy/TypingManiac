@@ -1,8 +1,0 @@
--install eslint and prettier eslint (not 100% sure prettier is required)
--go to prefences->settings then make sure you're selecting for this workspace and not this user
--search 'Code Actions on Save'
--add this ' "eslint.format.enable": true,
-  "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
-  }' to the file opened with the step above (the code actions on save one)
--should lint your code on save now!
