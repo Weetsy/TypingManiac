@@ -77,6 +77,10 @@ app.get('/callback', async (req, res) => {
     }
   });
 
+  app.get('/stats', function(req, res) {
+      res.sendFile(`${__dirname}/views/stats.html`);
+  });
+
 app.listen(3000, function() {
     console.log('Listening on port 3000');
 });
