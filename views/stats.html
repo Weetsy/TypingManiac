@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <link rel="stylesheet" type="text/css" href="home.css">
+<script type="text/javascript" src="Scripts.js"></script>
 <html>
     <head>
         <title>Stats</title>
@@ -227,11 +228,24 @@
         }
     }
 
-    let userStats = new Stats("SampleUser");
+    let user = gitHubLogin();
+    if(user == null) {
+        user = "SampleUser";
+        console.log("NOT LOGGED IN!!!");
+    }
+    else {
+        user.then((username) => {
+            user = username;
+            console.log(user);
+            let userStats = new Stats(user);
 
-    document.getElementById('wpmA').addEventListener("click", function() {userStats.setChart(userStats.wpmAll, "wpm")});
-    document.getElementById('wpmD').addEventListener("click", function() {userStats.setChart(userStats.wpmDaily, "wpm")});
+            document.getElementById('wpmA').addEventListener("click", function() {userStats.setChart(userStats.wpmAll, "wpm")});
+            document.getElementById('wpmD').addEventListener("click", function() {userStats.setChart(userStats.wpmDaily, "wpm")});
 
-    document.getElementById('accA').addEventListener("click", function() {userStats.setChart(userStats.accAll, "acc")});
-    document.getElementById('accD').addEventListener("click", function() {userStats.setChart(userStats.accDaily, "acc")});
+            document.getElementById('accA').addEventListener("click", function() {userStats.setChart(userStats.accAll, "acc")});
+            document.getElementById('accD').addEventListener("click", function() {userStats.setChart(userStats.accDaily, "acc")});
+        })
+    }
+
+    
 </script>
