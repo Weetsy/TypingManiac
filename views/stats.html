@@ -11,9 +11,9 @@
                 <div class="chartbox">
                     <h2 id="wpmChart"></h2>
                     <div class="chartbuttoncollection">
-                        <button type="button" class="chartbutton">All Time</button>
-                        <button type="button" class="chartbutton">Weekly</button>
-                        <button type="button" class="chartbutton">Daily</button>                       
+                        <button type="button" class="chartbutton" id="wpmA">All Time</button>
+                        <button type="button" class="chartbutton" id="wpmW">Weekly</button>
+                        <button type="button" class="chartbutton" id="wpmD">Daily</button>                       
                     </div>
                 </div>
             </div>
@@ -21,9 +21,9 @@
                 <div class="chartbox">
                     <h3 id="accChart"></h3>
                     <div class="chartbuttoncollection">
-                        <button type="button" class="chartbutton">All Time</button>
-                        <button type="button" class="chartbutton">Weekly</button>
-                        <button type="button" class="chartbutton">Daily</button>                
+                        <button type="button" class="chartbutton" id="accA">All Time</button>
+                        <button type="button" class="chartbutton" id="accW">Weekly</button>
+                        <button type="button" class="chartbutton" id="accD">Daily</button>                
                     </div>
                 </div>
             </div>
@@ -193,16 +193,6 @@
             let month = myDate.getMonth();
             let year = myDate.getFullYear();
 
-            /*
-            let builtDate;
-            if(day.toString().length < 2) {
-                builtDate = month + "/" + "0" + day + "/" + year;
-            }
-            else {
-                builtDate = month + "/" + day + "/" + year;
-            }
-            */
-
             let dailyX = [];
             let dailyWPM = [];
             let dailyAcc = [];
@@ -231,4 +221,10 @@
     }
 
     let userStats = new Stats("SampleUser");
+
+    document.getElementById('wpmA').addEventListener("click", function() {userStats.setChart(userStats.wpmAll, "wpm")});
+    document.getElementById('wpmD').addEventListener("click", function() {userStats.setChart(userStats.wpmDaily, "wpm")});
+
+    document.getElementById('accA').addEventListener("click", function() {userStats.setChart(userStats.accAll, "acc")});
+    document.getElementById('accD').addEventListener("click", function() {userStats.setChart(userStats.accDaily, "acc")});
 </script>
