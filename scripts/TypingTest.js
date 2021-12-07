@@ -89,24 +89,24 @@ class TypingTest {
     record.
     */
   insertStats(user, speed, accuracy) {
+    // using built in JSON utility package turn object to string and store in a variable
+    let raw = JSON.stringify({ 'User': user, 'WPM': speed, 'Accuracy': accuracy });
     // instantiate a headers object
     let myHeaders = new Headers();
     // add content type header to object
     myHeaders.append('Content-Type', 'application/json');
-    // using built in JSON utility package turn object to string and store in a variable
-    let raw = JSON.stringify({ 'User': user, 'WPM': speed, 'Accuracy': accuracy });
-    // create a JSON object with parameters for API call and store in a variable
+    
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
       body: raw,
       redirect: 'follow'
     };
-    // make API call with parameters and use promises to get response
-    fetch('https://4wiarmu0k6.execute-api.us-east-1.amazonaws.com/dev', requestOptions)
+
+    fetch('/insertStats', requestOptions)
       .then(response => response.text())
-      .then(result => console.log(JSON.parse(result).body))
-      .catch(error => console.log('error', error));
+      .then(response => console.log(response))
+      .catch();
   }
   /*
     (void) countDown is a function that runs from a generated interval object
