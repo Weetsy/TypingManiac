@@ -45,19 +45,27 @@ class Stats {
         scales: {
           xAxes: [
             {
+              ticks: {
+                fontColor: 'white'
+              },
               display: true,
               scaleLabel: {
                 display: true,
                 labelString: 'Time',
+                fontColor: 'white'
               },
             },
           ],
           yAxes: [
             {
+              ticks: {
+                fontColor: 'white'
+              },
               display: true,
               scaleLabel: {
                 display: true,
                 labelString: yLabel,
+                fontColor: 'white'
               },
             }
           ]
