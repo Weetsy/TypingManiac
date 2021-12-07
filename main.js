@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const fs = require('fs');
 const https = require('https');
-require('dotenv').config()
+require('dotenv').config();
 const { ClientCredentials, ResourceOwnerPassword, AuthorizationCode } = require('simple-oauth2');
 
 // Set custom application icon
@@ -55,6 +55,10 @@ app.get('/TypingTest.js', function(req, res) {
 
 app.get('/Scripts.js', function(req, res) {
   res.sendFile(`${__dirname}/scripts/Scripts.js`);
+});
+
+app.get('/Stats.js', function(req, res) {
+  res.sendFile(`${__dirname}/scripts/Stats.js`);
 });
 
 /*
