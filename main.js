@@ -1,8 +1,5 @@
 const express = require('express');
 const app = express();
-const fs = require('fs');
-const https = require('https');
-const fetch = require('node-fetch');
 const bodyParser = require('body-parser');
 require('dotenv').config();
 const { ClientCredentials, ResourceOwnerPassword, AuthorizationCode } = require('simple-oauth2');
@@ -88,27 +85,6 @@ app.get('/callback', async (req, res) => {
 
 app.get('/stats', function(req, res) {
   res.sendFile(`${__dirname}/views/stats.html`);
-});
-
-app.post('/insertStats', jsonParser, function(req, res) {
-  let user = req.body.User;
-  let speed = req.body.WPM;
-  let accuracy = req.body.Accuracy;
-
-  // using built in JSON utility package turn object to string and store in a variable
-  let raw = JSON.stringify({ 'User': user, 'WPM': speed, 'Accuracy': accuracy });
-  // create a JSON object with parameters for API call and store in a variable
-  var requestOptions = {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: raw,
-    redirect: 'follow'
-  };
-  // make API call with parameters and use promises to get response
-  fetch('https://4wiarmu0k6.execute-api.us-east-1.amazonaws.com/dev', requestOptions)
-    .then(response => response.text())
-    .then(result => res.send(JSON.parse(result).body))
-    .catch(error => console.log('error', error));
 });
 
 app.listen(3000, function() {

@@ -29,7 +29,7 @@
     <script>
     let ct = new TypingTest(30); // Make a new test with time 30
     configurePage(ct);
-    let mylogin = gitHubLogin();
+    let mylogin = gitHubLogin(); // Get username to load webpage
     // Check login status using the returned Promise's .then() method.
     if (mylogin != null) {
       mylogin.then((data) => {

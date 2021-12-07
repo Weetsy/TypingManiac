@@ -1,6 +1,5 @@
 // NOTE: TypingTest.js should be used in conjunction with Scripts.js, and
 // Scripts.js should be loaded FIRST.
-let timer = null; // Global timer variable
 
 /*
 TypingTest class is used to hold data relevant to the current typing test
@@ -16,6 +15,7 @@ class TypingTest {
     this.startedTest = false;
     this.chosenWords = [];
     this.currentWords = [];
+    this.timer; // Global timer variable
   }
   /*
     (Array: String) getWords returns an array of Strings containing words. This
@@ -89,24 +89,24 @@ class TypingTest {
     record.
     */
   insertStats(user, speed, accuracy) {
-    // using built in JSON utility package turn object to string and store in a variable
-    let raw = JSON.stringify({ 'User': user, 'WPM': speed, 'Accuracy': accuracy });
     // instantiate a headers object
     let myHeaders = new Headers();
     // add content type header to object
     myHeaders.append('Content-Type', 'application/json');
-    
+    // using built in JSON utility package turn object to string and store in a variable
+    let raw = JSON.stringify({ 'User': user, 'WPM': speed, 'Accuracy': accuracy });
+    // create a JSON object with parameters for API call and store in a variable
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
       body: raw,
       redirect: 'follow'
     };
-
-    fetch('/insertStats', requestOptions)
+      // make API call with parameters and use promises to get response
+    fetch('https://4wiarmu0k6.execute-api.us-east-1.amazonaws.com/dev', requestOptions)
       .then(response => response.text())
-      .then(response => console.log(response))
-      .catch();
+      .then(result => console.log(JSON.parse(result).body))
+      .catch(error => console.log('error', error));
   }
   /*
     (void) countDown is a function that runs from a generated interval object
@@ -121,7 +121,7 @@ class TypingTest {
       let totalChars = this.correctChars + this.missedChars;
       let accuracy = Math.floor((this.correctChars / totalChars) * 100);
       console.log('Accuracy is ' + accuracy.toString());
-      clearInterval(timer);
+      clearInterval(this.timer);
       document.getElementById('score').style.display = 'block';
       document.getElementById('score').innerHTML = 'Congrats! You typed ' +
                 WPM.toString() + ' WPM!';
@@ -164,8 +164,8 @@ function configurePage(ct) {
     if (document.getElementById('typeBox').value != 0) {
       if (!ct.startedTest) {
         ct.startedTest = true;
-        timer = setInterval(() => {
-          ct.countDown(); 
+        ct.timer = setInterval(() => {
+          ct.countDown();
         }, 1000);
       }
     }
