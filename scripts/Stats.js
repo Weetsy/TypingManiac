@@ -143,7 +143,7 @@ class Stats {
 
   removeExtraTime(dates) {
     let i = 0;
-    while(i < dates.length) {
+    while (i < dates.length) {
       dates[i] = dates[i].substring(0, dates[i].indexOf(':'));
       console.log(dates[i]);
       i++;
