@@ -7,8 +7,6 @@ const bodyParser = require('body-parser');
 require('dotenv').config();
 const { ClientCredentials, ResourceOwnerPassword, AuthorizationCode } = require('simple-oauth2');
 
-let jsonParser = bodyParser.json();
-
 // Set custom application icon
 app.use('/favicon.ico', express.static(`${__dirname}/icons/favicon.ico`));
 /*
@@ -59,6 +57,10 @@ app.get('/TypingTest.js', function(req, res) {
 
 app.get('/Scripts.js', function(req, res) {
   res.sendFile(`${__dirname}/scripts/Scripts.js`);
+});
+
+app.get('/Stats.js', function(req, res) {
+  res.sendFile(`${__dirname}/scripts/Stats.js`);
 });
 
 /*
