@@ -141,6 +141,15 @@ class Stats {
     return 0;
   }
 
+  removeExtraTime(dates) {
+    let i = 0;
+    while(i < dates.length) {
+      dates[i] = dates[i].substring(0, dates[i].indexOf(':'));
+      console.log(dates[i]);
+      i++;
+    }
+  }
+
   async populateObject() {
     this.dataset = await this.dataset; // ensure the promise has resolved from the constructor
     this.dataset = this.dataset.Items;
@@ -157,6 +166,8 @@ class Stats {
       dates.push(this.dataset[i].Time);
       i++;
     }
+
+    this.removeExtraTime(dates);
     console.log(`wpm = ${wpm}`);
     console.log(`acc = ${accuracy}`);
 
